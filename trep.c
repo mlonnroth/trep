@@ -4,9 +4,8 @@
 #include <stdlib.h>
 #include <assert.h>
 
-/* Default values for lunch-break and stop-time */
+/* Default value for lunch-break */
 #define DEFAULT_ILUNCH 15
-#define DEFAULT_STOP "1600"
 
 /* Convert string-time input (hhmm) to minutes since midnight
    Formula: input is integer-divided by 100 to get hours, then multiplied by 60 to get minutes
@@ -28,7 +27,7 @@ void usage_exit() {
   puts("\tstart/stop format hhmm");
   puts("\tlunch format mm");
   printf("\n\'%s 745 1615 30\' means you came at 07:45 and left at 16:15 with a 30 minutes lunch\n\n", PROG);
-  printf("Default values: if not specified, stop defaults to 1600 and lunch to 15\n(c) 2018 M.Lonnroth\n");
+  printf("Default values: if not specified, lunch defaults to 15 minutes and stop-time adjusted for 8 hours of work\n");
   exit(1);
 }
 
@@ -51,9 +50,9 @@ int main (int argc, char **argv) {
     ilunch = atoi(argv[3]);
   }
 
-  /* Convert stop-time to minutes or use default value */
+  /* Convert stop-time to minutes or calculate 8 working hours */
   if (argc < 3 || !argv[2]) {
-    istop = atomin(DEFAULT_STOP);
+    istop = istart + 8*60 + ilunch;
   } else {
     istop = atomin(argv[2]);
   }
